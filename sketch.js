@@ -6,47 +6,75 @@ const Body = Matter.Body;
 
 let engine;
 let world;
-var ball;
-var ground;
-var wedge;
 var angle=60;
-var poly;
-var boxes=[];
 
+var ground;
+var b1,b2,b3,b4;
+var top_wall;
+var ball,rock;
+
+var btn1;
+var btn2;
 function setup() {
   createCanvas(400,400);
 
   engine = Engine.create();
   world = engine.world;
-  var option={
-    isStatic:false
+  
+   
+  var ground_options ={
+    isStatic: true
   };
- ground=Bodies.rectangle(100,300,300,20);
- // World.add(world,ground);
-  box1 = new Box(200,100,50,50);
+ 
+  var ball_options = {
+    
+     restitution: 0.75,
+  }
+
+  var rock_options = {
+    restitution: 0.2,
+   
+
+  }
+   
+  btn2 = createImg('up.png');
+  btn2.position(350,30);
+  btn2.size(50,50);
+  btn2.mouseClicked(vForce);
+  
+  ball = Bodies.circle(100,10,20,ball_options);
+  World.add(world,ball);
+  
+  rock = Bodies.circle(250,10,20,rock_options);
+  World.add(world,rock);
+
+  ground= Bodies.rectangle(200,390,400,20,ground_options);
+
+  World.add(world, ground);
+ 
   
 
   rectMode(CENTER);
   ellipseMode(RADIUS);
 }
-function mousePressed(){
-  boxes.push(
-    
-    
-    new Box(50,50,mouseX,mouseY)
-    
-    
-    )
-}
+
 
 function draw() 
 {
   background(51);
-  rect(ground.position.x,ground.position.y,440,10);
   Engine.update(engine);
- for(var i=0;i<boxes.length;i++) {
- boxes[i].show();}
   
-  
+rect(ground.position.x,ground.position.y,400,20);
+ellipse(ball.position.x,ball.position.y,20);
+push();
+fill("brown");
+ellipse(rock.position.x,rock.position.y,20);
+pop();
 }
 
+function vForce()
+{
+   Matter.Body.applyForce(ball,{x:0,y:0},{x:0,y:-0.05});
+
+  
+}
